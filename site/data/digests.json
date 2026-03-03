@@ -1,13 +1,19 @@
 {
-  "generated": "2026-03-03T21:33:39.660998",
+  "generated": "2026-03-03T21:37:11.691509",
   "count": 1,
   "digests": [
     {
       "date": "2026-03-03",
       "document_count": 8,
       "priority_count": 8,
-      "synopsis": "Error generating synopsis: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CYgs3gLyBdb3UTkJvTd6o'}",
-      "key_themes": [],
+      "synopsis": "# \u26a0\ufe0f Digest Quality Notice\n\n**CY Daily Digest \u2014 March 3, 2026**\n\n---\n\nToday's article feed does not support a standard digest. Here's why, stated plainly:\n\n**Of the 8 articles ingested, none contain substantive, original reporting relevant to your portfolio or macro themes:**\n\n- **1 article** (Bloomberg, \"US embassy attacked\") contains a single-sentence summary with no underlying data \u2014 no country named, no attack details, no policy implications quantified. Insufficient to analyze with rigor.\n- **2 articles** are forwarded **Stratechery pieces from 2019 and 2020** \u2014 the data portability essay and the COVID contact tracing piece. These are historically interesting but contain no current market signal.\n- **5 articles** are **Readwise & Reader app changelogs** (Jan 30 \u2013 Feb 27, 2026) \u2014 product bug fixes and UI updates for a reading app. Zero portfolio relevance.\n\nPublishing a digest built on this feed would require fabricating analysis \u2014 which violates the core promise of this format.\n\n---\n\n## What I Can Offer Instead\n\n**Option A \u2014 Geopolitical Flag (Low Confidence)**\nThe Bloomberg headline suggests a US embassy attack and escalating Iran conflict as of March 3, 2026. If confirmed by Tier 1 sources, this would have direct implications for:\n- **Energy positions** (KMI, LNG, NEE) via oil price shock\n- **Defense-adjacent AI** (PLTR, defense AI contracts) via increased government urgency\n- **Emerging market ETFs** (SPEM, FEM) via Middle East risk-off\n- **Options positioning** \u2014 VIX spike probability rises materially on confirmed US-Iran escalation\n\n*But this cannot be analyzed rigorously from a one-sentence summary. Recommend cross-referencing Reuters, WSJ, or FT before acting.*\n\n**Option B \u2014 Stratechery Archive Value**\nThe 2019 data portability piece is structurally relevant to current debates around **Apple App Store interoperability**, **EU Digital Markets Act enforcement**, and **AI model API access regulation** \u2014 all live portfolio issues. If you want a brief analytical note connecting Thompson's 2019 framework to today's AI platform wars, I can produce that as a standalone piece.\n\n---\n\n## Feed Recommendation\n\nTo generate the digest you designed, the ingestion pipeline needs articles from:\n- Bloomberg, WSJ, FT, Reuters, The Information, Stratechery (current), Axios Pro Rata/Deals\n- Semiconductor/AI-specific: SemiAnalysis, Hype Machine, Ars Technica\n- Crypto: CoinDesk, The Block\n- Biotech: STAT News, Fierce Pharma\n\nToday's feed appears to have a **source configuration or ingestion error** \u2014 the Readwise changelogs and archived forwards suggest the reader queue pulled from saved/archived items rather than the live feed.",
+      "key_themes": [
+        "CY Daily Digest \u2014 March 3, 2026",
+        "Of the 8 articles ingested, none contain substanti",
+        "**1 article** (Bloomberg, \"US embassy attacked\") c",
+        "**2 articles** are forwarded **Stratechery pieces ",
+        "**5 articles** are **Readwise & Reader app changel"
+      ],
       "is_weekly_report": false,
       "documents": [
         {
