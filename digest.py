@@ -160,7 +160,18 @@ class DailyDigest:
                         continue
 
                     response.raise_for_status()
-                    data = response.json()
+
+                    if not response.content:
+                        print(f"  Error fetching from '{location}': empty response (status {response.status_code})")
+                        break
+
+                    try:
+                        data = response.json()
+                    except ValueError as e:
+                        preview = response.text[:200] if response.text else "(empty)"
+                        print(f"  Error fetching from '{location}': invalid JSON — {e}")
+                        print(f"  Response ({response.status_code}): {preview}")
+                        break
 
                     for doc in data.get("results", []):
                         doc_date = None
