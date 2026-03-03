@@ -28,7 +28,7 @@ from email.mime.multipart import MIMEMultipart
 # ---------------------------------------------------------------------------
 CONFIG_FILE = Path.home() / ".daily_digest" / "config.json"
 ARCHIVE_DIR = Path.home() / ".daily_digest" / "archive"
-READWISE_API_BASE = "https://read.readwise.io/api/v3"
+READWISE_API_BASE = "https://readwise.io/api/v3"
 
 # Load user config files from repo
 REPO_DIR = Path(__file__).parent
