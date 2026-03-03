@@ -87,6 +87,31 @@ def main():
     print()
 
     # ----------------------------------------------------------------
+    # Granola (optional)
+    # ----------------------------------------------------------------
+    print("4. GRANOLA MEETING NOTES (optional)")
+    print("   If you use Granola (granola.ai) on this machine, today's meeting notes")
+    print("   will automatically appear in your digest — no extra login required.")
+    print()
+
+    existing_granola = existing.get("granola", {})
+    enable_granola_input = prompt(
+        "   Enable Granola integration? (y/n)",
+        "y" if existing_granola.get("enabled", True) else "n",
+    ).strip().lower()
+    enable_granola = enable_granola_input in ("y", "yes", "")
+
+    granola_credentials_path = ""
+    if enable_granola:
+        default_cred_note = "  (leave blank to use the default: ~/Library/Application Support/Granola/supabase.json)"
+        print(f"   Granola credentials path{default_cred_note}")
+        granola_credentials_path = prompt(
+            "   Credentials path",
+            existing_granola.get("credentials_path", ""),
+        )
+        print()
+
+    # ----------------------------------------------------------------
     # Build config
     # ----------------------------------------------------------------
     config = {
@@ -98,6 +123,10 @@ def main():
             "sender_email": sender_email,
             "sender_password": sender_password,
             "recipient_email": recipient_email,
+        },
+        "granola": {
+            "enabled": enable_granola,
+            "credentials_path": granola_credentials_path or None,
         },
     }
 
@@ -113,7 +142,7 @@ def main():
     # ----------------------------------------------------------------
     # Scheduling instructions
     # ----------------------------------------------------------------
-    print("4. SCHEDULE YOUR DIGEST")
+    print("5. SCHEDULE YOUR DIGEST")
     print()
     print("   Option A — macOS launchd (runs even if crontab is disabled):")
     print(f"   See INSTALLATION.md for launchd instructions.")

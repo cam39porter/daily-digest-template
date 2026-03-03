@@ -6,10 +6,13 @@ Fetches articles from Readwise Reader, generates an AI-powered digest
 tailored to your writing style and interests, and delivers it by email
 with a published web archive.
 
+Optionally pulls today's Granola meeting notes and weaves them into the digest
+so decisions and action items surface alongside your reading.
+
 Configure via:
   config/writing_guide.md   — writing style and output format
   config/filter_config.json — companies, geographies, sectors, people you care about
-  ~/.daily_digest/config.json — API keys and email settings (created by setup.py)
+  ~/.daily_digest/config.json — API keys, email settings, and Granola options (created by setup.py)
 """
 
 import os
@@ -64,7 +67,7 @@ EMAIL_HTML_TEMPLATE = '''<!DOCTYPE html>
   <div class="header">
     <h1>{digest_name} — Daily Digest</h1>
     <p><strong>Date:</strong> {date}</p>
-    <p><strong>Articles:</strong> {article_count} | <strong>Priority:</strong> {priority_count}</p>
+    <p><strong>Articles:</strong> {article_count} | <strong>Priority:</strong> {priority_count}{meeting_badge}</p>
   </div>
   {content}
   <div class="citations">
@@ -78,6 +81,199 @@ EMAIL_HTML_TEMPLATE = '''<!DOCTYPE html>
   </div>
 </body>
 </html>'''
+
+
+# ---------------------------------------------------------------------------
+# Granola meeting notes client
+# ---------------------------------------------------------------------------
+
+class GranolaClient:
+    """
+    Fetches today's meeting notes from Granola using its (reverse-engineered)
+    private API. Credentials are read from the Granola desktop app's local
+    credential store — no separate login required if you're already signed in.
+
+    Credential file locations:
+      macOS:   ~/Library/Application Support/Granola/supabase.json
+      Windows: %APPDATA%\\Granola\\supabase.json
+
+    The file is written by the Granola app and contains a WorkOS access_token
+    and refresh_token. This client refreshes the token automatically when
+    it expires (tokens rotate on every refresh — the new token is written
+    back to disk immediately).
+    """
+
+    GRANOLA_API_BASE = "https://api.granola.ai"
+    WORKOS_AUTH_URL = "https://api.workos.com/user_management/authenticate"
+
+    # WorkOS client ID used by the Granola desktop app (from reverse engineering).
+    # This is the public identifier for Granola's OAuth application — it is not
+    # a secret and appears in every Granola API request.
+    GRANOLA_CLIENT_ID = "client_01JKGE7Y2BPGKZA9S0XM1G9AMF"
+
+    def __init__(self, credentials_path: Optional[Path] = None):
+        if credentials_path:
+            self.credentials_path = Path(credentials_path)
+        else:
+            self.credentials_path = self._default_credentials_path()
+
+        self.credentials = self._load_credentials()
+        self.session = requests.Session()
+        self.session.headers.update({
+            "Content-Type": "application/json",
+            "User-Agent": "Granola/5.354.0",
+            "X-Client-Version": "5.354.0",
+        })
+        self._ensure_valid_token()
+
+    @staticmethod
+    def _default_credentials_path() -> Path:
+        import platform
+        if platform.system() == "Windows":
+            return Path(os.environ.get("APPDATA", "")) / "Granola" / "supabase.json"
+        return Path.home() / "Library" / "Application Support" / "Granola" / "supabase.json"
+
+    def _load_credentials(self) -> Dict:
+        if not self.credentials_path.exists():
+            raise FileNotFoundError(
+                f"Granola credentials not found at {self.credentials_path}. "
+                "Make sure Granola is installed and you are signed in."
+            )
+        with open(self.credentials_path) as f:
+            return json.load(f)
+
+    def _ensure_valid_token(self) -> None:
+        """Refresh the WorkOS access token using the stored refresh token.
+        Granola uses rotating refresh tokens — we must write the new token
+        back to disk immediately or subsequent refreshes will fail."""
+        refresh_token = self.credentials.get("refresh_token")
+        if not refresh_token:
+            return  # No refresh token; use access_token as-is and hope it's valid.
+
+        try:
+            resp = requests.post(
+                self.WORKOS_AUTH_URL,
+                json={
+                    "client_id": self.GRANOLA_CLIENT_ID,
+                    "grant_type": "refresh_token",
+                    "refresh_token": refresh_token,
+                },
+                timeout=30,
+            )
+            resp.raise_for_status()
+            data = resp.json()
+
+            self.credentials["access_token"] = data["access_token"]
+            self.credentials["refresh_token"] = data["refresh_token"]
+
+            # Write rotated tokens back so the next run (and Granola itself) can use them.
+            with open(self.credentials_path, "w") as f:
+                json.dump(self.credentials, f, indent=2)
+
+        except Exception as e:
+            print(f"  Warning: Could not refresh Granola token ({e}). Using cached access token.")
+
+    def _auth_header(self) -> Dict:
+        return {"Authorization": f"Bearer {self.credentials.get('access_token', '')}"}
+
+    # ------------------------------------------------------------------
+    # Fetch meetings
+    # ------------------------------------------------------------------
+
+    def get_todays_meetings(self) -> List[Dict]:
+        """Return meeting summaries from the last 24 hours."""
+        from dateutil import parser as date_parser
+
+        print("  Fetching today's Granola meeting notes...")
+        cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+        meetings: List[Dict] = []
+
+        try:
+            resp = self.session.post(
+                f"{self.GRANOLA_API_BASE}/v2/get-documents",
+                headers=self._auth_header(),
+                json={"limit": 50, "offset": 0, "include_last_viewed_panel": True},
+                timeout=30,
+            )
+            resp.raise_for_status()
+            raw = resp.json()
+
+            # The response may be a list or {"documents": [...]}
+            docs = raw if isinstance(raw, list) else raw.get("documents", [])
+
+            for doc in docs:
+                doc_date = None
+                for field in ("created_at", "updated_at"):
+                    raw_date = doc.get(field)
+                    if raw_date:
+                        try:
+                            doc_date = date_parser.parse(raw_date)
+                            if doc_date.tzinfo is None:
+                                doc_date = doc_date.replace(tzinfo=timezone.utc)
+                            break
+                        except Exception:
+                            continue
+
+                if doc_date is None or doc_date >= cutoff:
+                    meetings.append(self.extract_meeting_summary(doc))
+
+        except Exception as e:
+            print(f"  Error fetching Granola meetings: {e}")
+
+        print(f"  Found {len(meetings)} Granola meetings from the last 24 hours")
+        return meetings
+
+    # ------------------------------------------------------------------
+    # Content extraction
+    # ------------------------------------------------------------------
+
+    def extract_meeting_summary(self, doc: Dict) -> Dict:
+        """Return a clean dict summarising one Granola document."""
+        panel = doc.get("last_viewed_panel") or {}
+        content_node = panel.get("content") or {}
+        notes = self._prosemirror_to_markdown(content_node).strip()
+
+        return {
+            "id": doc.get("id", ""),
+            "title": doc.get("title", "Untitled Meeting"),
+            "date": doc.get("created_at", ""),
+            "notes": notes[:4000],  # Guard against very long transcripts
+        }
+
+    @classmethod
+    def _prosemirror_to_markdown(cls, node: Dict, _depth: int = 0) -> str:
+        """Recursively convert a ProseMirror JSON node tree to Markdown text."""
+        if not node:
+            return ""
+
+        node_type = node.get("type", "")
+        children = node.get("content", [])
+
+        if node_type == "text":
+            return node.get("text", "")
+
+        if node_type == "hardBreak":
+            return "\n"
+
+        if node_type == "heading":
+            level = node.get("attrs", {}).get("level", 2)
+            inner = "".join(cls._prosemirror_to_markdown(c) for c in children)
+            return f"{'#' * level} {inner}\n\n"
+
+        if node_type == "paragraph":
+            inner = "".join(cls._prosemirror_to_markdown(c) for c in children)
+            return f"{inner}\n\n" if inner.strip() else ""
+
+        if node_type in ("bulletList", "orderedList"):
+            return "".join(cls._prosemirror_to_markdown(c, _depth) for c in children)
+
+        if node_type == "listItem":
+            inner = "".join(cls._prosemirror_to_markdown(c, _depth + 1) for c in children).strip()
+            indent = "  " * _depth
+            return f"{indent}- {inner}\n"
+
+        # Fallback: recurse into children
+        return "".join(cls._prosemirror_to_markdown(c, _depth) for c in children)
 
 
 # ---------------------------------------------------------------------------
@@ -104,6 +300,9 @@ class DailyDigest:
         self.writing_guide = self._load_writing_guide()
         self.filter_config = self._load_filter_config()
 
+        # Granola integration (optional — gracefully disabled if not configured)
+        self.granola_client: Optional[GranolaClient] = self._init_granola()
+
     # ------------------------------------------------------------------
     # Config loading
     # ------------------------------------------------------------------
@@ -126,6 +325,27 @@ class DailyDigest:
             with open(FILTER_CONFIG_FILE) as f:
                 return json.load(f)
         return {}
+
+    def _init_granola(self) -> Optional[GranolaClient]:
+        """Return a GranolaClient if Granola is enabled and credentials are found."""
+        granola_cfg = self.config.get("granola", {})
+
+        # Explicit opt-out in config
+        if granola_cfg.get("enabled") is False:
+            return None
+
+        credentials_path = granola_cfg.get("credentials_path")
+        cred_path = Path(credentials_path) if credentials_path else GranolaClient._default_credentials_path()
+
+        if not cred_path.exists():
+            return None  # Granola not installed / not signed in — skip silently
+
+        try:
+            print("Granola credentials found — meeting notes will be included in today's digest.")
+            return GranolaClient(credentials_path=cred_path)
+        except Exception as e:
+            print(f"Warning: Could not initialise Granola client ({e}). Continuing without meeting notes.")
+            return None
 
     # ------------------------------------------------------------------
     # Readwise fetching
@@ -304,16 +524,27 @@ class DailyDigest:
 
         return "\n".join(lines)
 
-    def _build_section_template(self) -> str:
+    def _build_section_template(self, has_meetings: bool = False) -> str:
         """Build section instructions from writing_guide.md."""
         fc = self.filter_config
         digest_name = fc.get("digest_name", "My Digest")
-        focus = fc.get("focus_description", "your focus area")
 
         has_companies = bool([
             c for c in fc.get("portfolio_companies", [])
             if c.get("name") and c["name"] != "Company Name"
         ])
+
+        meetings_section = ""
+        if has_meetings:
+            meetings_section = """
+<h2>Today's Meetings</h2>
+Summarise each meeting from the Granola notes above. For each:
+1. <strong>Meeting title + date/time</strong>
+2. <ul><li> Key decisions made (bold the decision)
+3. <ul><li> Open action items — who owns what (bold the owner and the task)
+4. <ul><li> Connections to today's articles or broader themes in this digest — only include if the link is direct and non-obvious.
+Keep each meeting tight: decisions and actions only, no meeting-room filler.
+"""
 
         sections = f"""
 OUTPUT SECTIONS (use HTML formatting for email):
@@ -328,7 +559,7 @@ OUTPUT SECTIONS (use HTML formatting for email):
 2-3 structural patterns synthesized across multiple articles. Distinct from Key Developments — these are connections not obvious from any single piece.
 
 {"<h2>" + digest_name + " Relevance</h2>" + chr(10) + "Connect today's news directly to entities in the filter config above (portfolio companies, geographies, sectors, people). One bullet per connection. Format: <strong>[Entity Name]</strong>: one sentence + inline article link. Only include genuine, direct connections — do not force relevance." if has_companies else ""}
-
+{meetings_section}
 <h2>Other Sections</h2>
 Include any additional sections defined in the writing guide that have relevant content today. Skip sections with no relevant content and state why briefly.
 """
@@ -338,7 +569,7 @@ Include any additional sections defined in the writing guide that have relevant 
     # Generation
     # ------------------------------------------------------------------
 
-    def generate_synopsis(self, documents: List[Dict], historical: List[Dict]) -> Dict:
+    def generate_synopsis(self, documents: List[Dict], historical: List[Dict], meetings: Optional[List[Dict]] = None) -> Dict:
         """Generate AI digest using Claude."""
         print("Generating digest with Claude...")
 
@@ -380,7 +611,17 @@ What changed this week that matters in 5 years?
 """
 
         filter_context = self._build_filter_context()
-        section_template = self._build_section_template()
+        section_template = self._build_section_template(has_meetings=bool(meetings))
+
+        # Build meeting notes block (injected into the prompt when Granola data exists)
+        meetings_block = ""
+        if meetings:
+            meeting_lines = [f"TODAY'S GRANOLA MEETING NOTES ({len(meetings)} meeting(s)):\n"]
+            for m in meetings:
+                meeting_lines.append(f"--- Meeting: {m['title']} ({m['date']}) ---")
+                meeting_lines.append(m["notes"] or "(no notes captured)")
+                meeting_lines.append("")
+            meetings_block = "\n".join(meeting_lines)
 
         prompt = f"""You are generating a personalized daily intelligence digest.
 
@@ -399,6 +640,8 @@ ALL ARTICLES:
 {json.dumps(doc_summaries[:60], indent=2)}
 
 {historical_summary}
+
+{meetings_block}
 
 {section_template}
 
@@ -428,6 +671,7 @@ CRITICAL RULES:
             "date": today.strftime("%Y-%m-%d"),
             "document_count": len(documents),
             "priority_count": len(priority_docs),
+            "meeting_count": len(meetings) if meetings else 0,
             "synopsis": synopsis_text,
             "key_themes": self._extract_themes(synopsis_text),
             "is_weekly_report": is_weekly_day,
@@ -522,11 +766,15 @@ CRITICAL RULES:
             url = f"https://read.readwise.io/read/{doc_id}" if doc_id else doc.get("source", "#")
             citations.append(f'<li><a href="{url}">{title}</a></li>')
 
+        meeting_count = synopsis.get("meeting_count", 0)
+        meeting_badge = f" | <strong>Meetings:</strong> {meeting_count}" if meeting_count else ""
+
         html_body = EMAIL_HTML_TEMPLATE.format(
             digest_name=digest_name,
             date=synopsis["date"],
             article_count=synopsis["document_count"],
             priority_count=synopsis["priority_count"],
+            meeting_badge=meeting_badge,
             content=synopsis["synopsis"],
             citation_count=len(citations),
             citations="\n".join(citations) if citations else "<li>No articles</li>",
@@ -602,7 +850,12 @@ CRITICAL RULES:
 
         documents = self.filter_and_mark_documents(documents)
         historical = self.get_historical_synopses(days=7)
-        synopsis = self.generate_synopsis(documents, historical)
+
+        meetings: List[Dict] = []
+        if self.granola_client:
+            meetings = self.granola_client.get_todays_meetings()
+
+        synopsis = self.generate_synopsis(documents, historical, meetings=meetings)
         self.save_synopsis(synopsis)
         self.update_site_data()
         self.send_email(synopsis)
