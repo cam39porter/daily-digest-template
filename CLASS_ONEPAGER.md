@@ -43,12 +43,11 @@ The data that lives in your head — your network, your experience, your sense o
 
 ## What We're Building
 
-A personalized daily digest that:
-1. Pulls everything new from your Readwise Reader feed (newsletters, saved articles, RSS)
-2. Filters it against a profile you define — companies, sectors, geographies, people you care about
-3. Sends it to Claude with your personal writing style guide
-4. Delivers a structured email digest every morning
-5. Publishes to a searchable web archive anyone can subscribe to
+A personalized weekly meeting digest that:
+1. Pulls this week's meeting notes from Granola
+2. Sends them to Claude with your personal writing style guide
+3. Delivers a structured email digest every week
+4. Publishes to a searchable web archive anyone can subscribe to
 
 **The output isn't a summary. It's an analysis — written in the voice you configure, organized around what you care about.**
 
@@ -59,7 +58,7 @@ A personalized daily digest that:
 | Time | Activity |
 |------|----------|
 | 0:00 | Preamble — the three principles, what we're building |
-| 0:10 | Account setup check — Readwise, Anthropic, GitHub, Netlify |
+| 0:10 | Account setup check — Anthropic, GitHub, Netlify, Granola |
 | 0:15 | Clone the template repository, run setup.py |
 | 0:25 | Fill in your writing_guide.md — who are you writing for, what's your style |
 | 0:35 | Fill in your filter_config.json — your companies, sectors, geographies |
@@ -85,11 +84,9 @@ Each participant needs these accounts. Each takes 5–10 minutes.
    - Go to Settings → API Keys → Create new key
    - Keep the key — you'll enter it in setup.py
 
-3. **Readwise Reader** — [readwise.io](https://readwise.io)
-   - *A reading app that collects everything you want to read — newsletters, articles, RSS feeds — into one place; it's the inbox your digest pulls from every morning.*
-   - Create an account ($7.99/month, free trial available)
-   - Go to readwise.io/access_token and copy your token
-   - **Before the workshop: subscribe to at least 5 newsletters or save 5 articles** so the feed has content to work with
+3. **Granola** — [granola.ai](https://granola.ai)
+   - *A meeting notes app that automatically captures and organizes your meetings.*
+   - Install the Granola desktop app and sign in before the workshop
 
 4. **GitHub** — [github.com](https://github.com)
    - *A website where developers store and share code — think of it as Google Drive for code, where your digest configuration and web archive live so Netlify can publish them automatically.*
@@ -144,7 +141,7 @@ Today's workshop builds the foundation. Here are natural next steps for each use
 - Build a Slack integration to deliver the digest to your team channel
 
 **Researchers / Analysts**
-- Add academic preprint servers (arXiv, SSRN) as Readwise RSS sources
+- Add a custom section for research notes from Granola meetings
 - Add a "Methodology Notes" section for research-specific analysis
 - Export the archive data to build a searchable knowledge base
 
@@ -168,4 +165,4 @@ Build tools that make your expertise more leverageable. That's the principle. To
 ---
 
 *Template repository: [github.com/cam39porter/daily-digest-template](https://github.com/cam39porter/daily-digest-template)*
-*Built with Claude Code + Readwise Reader + Anthropic API + Netlify*
+*Built with Claude Code + Granola + Anthropic API + Netlify*

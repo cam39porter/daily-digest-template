@@ -10,12 +10,11 @@ You read a lot. Newsletters pile up. Articles get saved and forgotten. Somewhere
 
 This tool automates that extraction. Every morning, it:
 
-1. Pulls everything new from your Readwise Reader feed (newsletters, saved articles, RSS feeds)
-2. Filters it against a profile you define — your portfolio companies, sectors, geographies, people
-3. Sends it to Claude (Anthropic's AI) with your personal writing guide
-4. Delivers a structured digest to your email and publishes it to a searchable web archive
+1. Pulls this week's meeting notes from Granola
+2. Sends them to Claude (Anthropic's AI) with your personal writing guide
+3. Delivers a structured digest to your email and publishes it to a searchable web archive
 
-The output isn't a summary. It's an analysis — written in the voice you configure, organized around what you care about, with inline citations back to every source.
+The output isn't a summary. It's an analysis — written in the voice you configure, organized around what you care about.
 
 ---
 
@@ -35,7 +34,7 @@ List the entities you care about:
 - **People** — individuals whose moves are signal for you
 
 ### 3. `~/.daily_digest/config.json` — Your credentials
-Created by `setup.py`. Stores your Readwise token, Anthropic API key, and email settings. Never committed to git.
+Created by `setup.py`. Stores your Anthropic API key and email settings. Never committed to git.
 
 ---
 
@@ -87,11 +86,9 @@ netlify.toml        — Netlify build config.
 ### Data Flow
 
 ```
-Readwise Reader (feed + saved articles)
+Granola (meeting notes, last 7 days)
         ↓
-  digest.py fetches last 24h
-        ↓
-  filter_config.json marks priority docs
+  digest.py fetches meetings
         ↓
   writing_guide.md + filter_config.json → prompt to Claude
         ↓
@@ -141,18 +138,17 @@ When someone subscribes via the form, their email is captured in your Netlify da
 
 | Service | Cost |
 |---------|------|
-| Readwise Reader | ~$8/month (Reader subscription) |
-| Anthropic API | ~$0.05–0.30/day (Claude Sonnet, depending on article volume) |
+| Anthropic API | ~$0.05–0.30/week (Claude Sonnet) |
 | Netlify | Free tier is sufficient |
 | Email (Gmail) | Free |
 
-Total: **~$8–17/month** to run your own intelligence system.
+Total: essentially **free** beyond your Anthropic API usage.
 
 ---
 
 ## What This Is Not
 
-This tool does **not** replace reading. It surfaces what's worth reading and tells you why it matters to your specific situation. The links back to every source article are intentional — the digest is a triage layer, not a replacement for engaging with primary sources.
+This tool does **not** replace your meetings. It surfaces what was decided and what's outstanding — so the week's work doesn't get lost between sessions.
 
 ---
 

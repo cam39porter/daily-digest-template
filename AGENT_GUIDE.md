@@ -6,9 +6,8 @@ This guide is for use with Claude Code (or any AI coding assistant). It contains
 
 ## What You're Building
 
-A personal daily digest that:
-- Pulls articles from Readwise Reader every 24 hours
-- Filters them based on your interests (companies, sectors, geographies)
+A personal weekly digest that:
+- Pulls meeting notes from Granola for the last 7 days
 - Generates an analysis in your writing style using Claude
 - Delivers by email and publishes to a searchable web archive on Netlify
 
@@ -17,7 +16,6 @@ A personal daily digest that:
 ## Prerequisites to Verify First
 
 Before starting any prompts, confirm the student has:
-- [ ] A Readwise account with Reader enabled — get token at readwise.io/access_token
 - [ ] An Anthropic API key — get at console.anthropic.com/settings/keys
 - [ ] A Gmail account with an App Password configured (myaccount.google.com → Security → App passwords)
 - [ ] A GitHub account
@@ -99,9 +97,8 @@ Make sure keywords are specific enough to reliably surface relevant articles.
 
 ```
 Run python3 digest.py and tell me:
-1. How many documents were fetched from Readwise
-2. How many were marked as priority
-3. Whether the Claude API call succeeded
+1. How many Granola meetings were fetched
+2. Whether the Claude API call succeeded
 4. Whether the email was sent
 5. Whether the site data was updated
 
@@ -236,11 +233,10 @@ as a formatted Slack message. Call it from the run() method after send_email().
 If you want to run the entire setup in one session, paste this as the opening prompt:
 
 ```
-I'm building a personalized daily digest system using the daily-digest-template.
+I'm building a personalized weekly meeting digest using the daily-digest-template.
 The system should:
-1. Pull articles from my Readwise Reader feed daily
-2. Filter them based on my specific interests (I'll describe them)
-3. Generate an analysis in my writing style using Claude
+1. Pull meeting notes from Granola for the last 7 days
+2. Generate an analysis in my writing style using Claude
 4. Send it to my email and publish to a web archive
 
 Please guide me through the full setup:
@@ -260,8 +256,7 @@ Then proceed with the setup steps one at a time, waiting for my confirmation bef
 
 | Issue | Likely Cause | Fix |
 |-------|-------------|-----|
-| `No documents found` | Readwise feed is empty or token is wrong | Check readwise.io/access_token; confirm you have articles in your Reader feed |
-| `401 Unauthorized` | Readwise token is invalid | Re-run `python3 setup.py` and re-enter the token |
+| `No Granola meetings found` | Granola not installed or not signed in | Open Granola on your Mac and sign in, then re-run |
 | `Anthropic API error` | API key wrong or quota exceeded | Check console.anthropic.com/settings/keys |
 | Email not sending | Gmail App Password not set up | See myaccount.google.com → Security → App passwords |
 | Netlify not deploying | `digests.json` not being committed | Ensure `site/data/digests.json` is NOT in .gitignore; the auto-deploy depends on this file being pushed |

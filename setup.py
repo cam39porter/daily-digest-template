@@ -54,17 +54,9 @@ def main():
         print()
 
     # ----------------------------------------------------------------
-    # Readwise token
-    # ----------------------------------------------------------------
-    print("1. READWISE API TOKEN")
-    print("   Get yours at: https://readwise.io/access_token")
-    readwise_token = prompt("   Readwise token", existing.get("readwise_token", ""), password=True)
-    print()
-
-    # ----------------------------------------------------------------
     # Anthropic API key
     # ----------------------------------------------------------------
-    print("2. ANTHROPIC API KEY (for Claude)")
+    print("1. ANTHROPIC API KEY (for Claude)")
     print("   Get yours at: https://console.anthropic.com/settings/keys")
     anthropic_key = prompt("   Anthropic API key", existing.get("anthropic_api_key", ""), password=True)
     print()
@@ -72,7 +64,7 @@ def main():
     # ----------------------------------------------------------------
     # Email configuration
     # ----------------------------------------------------------------
-    print("3. EMAIL CONFIGURATION")
+    print("2. EMAIL CONFIGURATION")
     print("   Gmail recommended. Use an App Password, not your account password.")
     print("   How to create a Gmail App Password:")
     print("     myaccount.google.com → Security → 2-Step Verification → App passwords")
@@ -89,8 +81,8 @@ def main():
     # ----------------------------------------------------------------
     # Granola (optional)
     # ----------------------------------------------------------------
-    print("4. GRANOLA MEETING NOTES (optional)")
-    print("   If you use Granola (granola.ai) on this machine, today's meeting notes")
+    print("3. GRANOLA MEETING NOTES (optional)")
+    print("   If you use Granola (granola.ai) on this machine, this week's meeting notes")
     print("   will automatically appear in your digest — no extra login required.")
     print()
 
@@ -115,7 +107,6 @@ def main():
     # Build config
     # ----------------------------------------------------------------
     config = {
-        "readwise_token": readwise_token,
         "anthropic_api_key": anthropic_key,
         "email": {
             "smtp_server": smtp_server,
@@ -142,7 +133,7 @@ def main():
     # ----------------------------------------------------------------
     # Scheduling instructions
     # ----------------------------------------------------------------
-    print("5. SCHEDULE YOUR DIGEST")
+    print("4. SCHEDULE YOUR DIGEST")
     print()
     print("   Option A — macOS launchd (runs even if crontab is disabled):")
     print(f"   See INSTALLATION.md for launchd instructions.")
@@ -166,7 +157,7 @@ def main():
     print("   nano config/filter_config.json")
     print()
     print("3. Test your setup:")
-    print("   python3 digest.py")
+    print("   python3 digest.py --dry-run")
     print()
     print("4. Deploy your archive site to Netlify:")
     print("   See INSTALLATION.md → 'Netlify Deployment'")
