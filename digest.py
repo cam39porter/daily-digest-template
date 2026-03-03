@@ -496,7 +496,8 @@ CRITICAL RULES:
                 print("No changes. Skipping push.")
                 return
             subprocess.run(["git", "commit", "-m", commit_msg], cwd=REPO_DIR, check=True, capture_output=True)
-            subprocess.run(["git", "push", "origin", "main"], cwd=REPO_DIR, check=True, capture_output=True, timeout=60)
+            branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=REPO_DIR, check=True, capture_output=True, text=True).stdout.strip()
+            subprocess.run(["git", "push", "origin", branch], cwd=REPO_DIR, check=True, capture_output=True, timeout=60)
             print("Pushed to GitHub. Netlify will auto-deploy.")
         except subprocess.CalledProcessError as e:
             print(f"Git error: {e.stderr[:300] if e.stderr else e}")
@@ -575,8 +576,8 @@ CRITICAL RULES:
         for doc_id in document_ids:
             try:
                 response = self.session.patch(
-                    f"{READWISE_API_BASE}/save/",
-                    json={"id": doc_id, "location": "archive"},
+                    f"{READWISE_API_BASE}/list/{doc_id}/",
+                    json={"location": "archive"},
                 )
                 if response.status_code == 429:
                     time.sleep(int(response.headers.get("Retry-After", 60)))
