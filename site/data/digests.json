@@ -1,5 +1,88 @@
 {
-  "generated": "2026-01-01T00:00:00",
-  "count": 0,
-  "digests": []
+  "generated": "2026-03-03T21:27:28.630675",
+  "count": 1,
+  "digests": [
+    {
+      "date": "2026-03-03",
+      "document_count": 8,
+      "priority_count": 8,
+      "synopsis": "Error generating synopsis: Error code: 400 - {'type': 'error', 'error': {'type': 'invalid_request_error', 'message': 'Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.'}, 'request_id': 'req_011CYgraKsArw215tokK1X4C'}",
+      "key_themes": [],
+      "is_weekly_report": false,
+      "documents": [
+        {
+          "id": "01kjtsdsshmha291b252q4jv0t",
+          "title": "US embassy attacked",
+          "author": "Bloomberg",
+          "source": "mailto:reader-forwarded-email/8391c692d979af2a8fa8b43b10d61c98",
+          "summary": "Good morning. Americans are urged to leave the Middle East as the Iran conflict deepens.",
+          "published_date": "2026-03-03",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts8ynya5m97g9yq2t5zkcp",
+          "title": "Fwd: Portability and Interoperability (Stratechery Weekly Article 12-3-2019)",
+          "author": "Cameron Porter",
+          "source": "mailto:reader-forwarded-email/aec88ca0f4d10b71e2c1b4209270a252",
+          "summary": "Regulation should guarantee the principle of data portability. If you share data with one service, you should be able to move it to another.",
+          "published_date": "2026-03-03",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts8szjfvh6ewamzjts9xwh",
+          "title": "Fwd: Coronavirus Clarity (Stratechery Weekly Article 4-14-2020)",
+          "author": "Cameron Porter",
+          "source": "mailto:reader-forwarded-email/c2b08a82188365759af0103d10acf3de",
+          "summary": "Apple and Google, who last Friday jointly | announced new capabilities for contact tracing coronavirus carriers at scale, released a new statement yesterday clarifying that no government would tell them what to do.",
+          "published_date": "2026-03-03",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts2q9mren81bxvtxjshtc5",
+          "title": "January 30, 2026",
+          "author": "Readwise & Reader Changelog",
+          "source": "https://docs.readwise.io/changelog#january-30-2026",
+          "summary": "Several bugs were fixed, including duplicate image highlights and login errors from double taps. Tag dates no longer reset after clearing the browser cache. Parsing of articles from many websites and platforms like Twitter and Substack was improved.",
+          "published_date": "2026-01-30",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts2q8nnyx4n8qjgx5ep6j6",
+          "title": "February 6, 2026",
+          "author": "Readwise & Reader Changelog",
+          "source": "https://docs.readwise.io/changelog#february-6-2026",
+          "summary": "Readwise updated many features to improve syncing, exporting, and app connections. They fixed bugs in Twitter bookmarks, Notion, text-to-speech, and desktop updates. They also added a new WiseUp! Newsletter for helpful tips and guides.",
+          "published_date": "2026-02-06",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts2q7scfz3dt081vv7tm4p",
+          "title": "February 13, 2026",
+          "author": "Readwise & Reader Changelog",
+          "source": "https://docs.readwise.io/changelog#february-13-2026",
+          "summary": "The Reader app added new features like resizable sidebars, TTS for EPUBs on Android, and highlight tag management. Several bugs were fixed, including issues with CSV exports, YouTube subtitles, Twitter disconnect, and fullscreen images. Performance improvements were made for large highlight notebooks and better reading layouts on tablets.",
+          "published_date": "2026-02-13",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts2q6ptck8f1rw6e7wvq8a",
+          "title": "February 20, 2026",
+          "author": "Readwise & Reader Changelog",
+          "source": "https://docs.readwise.io/changelog#february-20-2026",
+          "summary": "Readwise fixed many bugs on Android, web, and export features to improve stability. They added new text-to-speech support for EPUBs on Android and made chat smarter by understanding visible content. They also updated parsing to handle changes in Twitter's API and improved how tweets and posts are shown.",
+          "published_date": "2026-02-20",
+          "is_priority": true
+        },
+        {
+          "id": "01kjts2q5r14wweqp98ev9f315",
+          "title": "February 27, 2026",
+          "author": "Readwise & Reader Changelog",
+          "source": "https://docs.readwise.io/changelog#february-27-2026",
+          "summary": "The update fixed many bugs related to keyboard shortcuts, document exports, and display issues. It improved handling of file uploads, API word counts, and social media post parsing. Overall, the changes make the app more reliable and easier to use.",
+          "published_date": "2026-02-27",
+          "is_priority": true
+        }
+      ]
+    }
+  ]
 }
