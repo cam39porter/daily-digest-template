@@ -7,17 +7,47 @@
 - An Anthropic API key — at console.anthropic.com/settings/keys
 - A Gmail account with an App Password (myaccount.google.com → Security → App passwords)
 - A GitHub account
+- The GitHub CLI (`gh`) — install at cli.github.com
 - A Netlify account (free tier)
 
 ---
 
-## Step 1: Clone and Install
+## Step 1: Fork, Authenticate, and Clone
+
+### 1a. Fork the template
+
+Go to [github.com/cam39porter/daily-digest-template](https://github.com/cam39porter/daily-digest-template) and click **Fork** in the top-right corner. This creates your own copy of the repository under your GitHub account — your personalized digest config and archive data will live there.
+
+### 1b. Authenticate the GitHub CLI
+
+The digest script pushes your updated archive to GitHub every time it runs. The `gh` CLI handles authentication so that `git push` works without prompts.
 
 ```bash
-git clone https://github.com/YOUR_GITHUB/daily-digest.git
-cd daily-digest
+gh auth login
+```
+
+Follow the prompts:
+1. Select **GitHub.com**
+2. Select **HTTPS**
+3. Select **Login with a web browser** (or paste a token)
+4. Copy the one-time code shown, press Enter to open the browser, paste the code, and authorize
+
+Verify it worked:
+```bash
+gh auth status
+```
+
+You should see `✓ Logged in to github.com`.
+
+### 1c. Clone your fork and install dependencies
+
+```bash
+git clone https://github.com/YOUR_GITHUB/daily-digest-template.git
+cd daily-digest-template
 pip install -r requirements.txt
 ```
+
+Replace `YOUR_GITHUB` with your GitHub username.
 
 ---
 
@@ -79,29 +109,15 @@ Digest completed successfully
 
 ## Step 5: Deploy the Web Archive
 
-### 5a. Initialize git and push to GitHub
+### 5a. Confirm your fork is connected
+
+Because you cloned from your fork in Step 1, git is already configured. Verify:
 
 ```bash
-# Create .gitignore
-cat > .gitignore << 'EOF'
-__pycache__/
-*.pyc
-*.pyo
-.env
-.DS_Store
-EOF
-
-git init
-git add .
-git commit -m "Initial commit — daily digest template"
+git remote -v
 ```
 
-Then create a new repository on GitHub and push:
-```bash
-git remote add origin https://github.com/YOUR_GITHUB/daily-digest.git
-git branch -M main
-git push -u origin main
-```
+You should see your fork URL listed as `origin`. If so, no further setup is needed — `digest.py` will push automatically on every run.
 
 ### 5b. Connect to Netlify
 
@@ -207,6 +223,7 @@ tail -f ~/.daily_digest/digest.log
 | `Rate limited` | Script auto-retries; check Readwise API status |
 | `Email authentication failed` | Use Gmail App Password, not account password |
 | `ModuleNotFoundError: dateutil` | Run `pip install -r requirements.txt` |
+| `git push` asks for a password | Run `gh auth login` and complete the browser flow |
 | `Netlify not deploying` | Check that `site/data/digests.json` is committed and pushed |
 
 ---
