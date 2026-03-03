@@ -54,17 +54,9 @@ def main():
         print()
 
     # ----------------------------------------------------------------
-    # Readwise token
-    # ----------------------------------------------------------------
-    print("1. READWISE API TOKEN")
-    print("   Get yours at: https://readwise.io/access_token")
-    readwise_token = prompt("   Readwise token", existing.get("readwise_token", ""), password=True)
-    print()
-
-    # ----------------------------------------------------------------
     # Anthropic API key
     # ----------------------------------------------------------------
-    print("2. ANTHROPIC API KEY (for Claude)")
+    print("1. ANTHROPIC API KEY (for Claude)")
     print("   Get yours at: https://console.anthropic.com/settings/keys")
     anthropic_key = prompt("   Anthropic API key", existing.get("anthropic_api_key", ""), password=True)
     print()
@@ -72,7 +64,7 @@ def main():
     # ----------------------------------------------------------------
     # Email configuration
     # ----------------------------------------------------------------
-    print("3. EMAIL CONFIGURATION")
+    print("2. EMAIL CONFIGURATION")
     print("   Gmail recommended. Use an App Password, not your account password.")
     print("   How to create a Gmail App Password:")
     print("     myaccount.google.com → Security → 2-Step Verification → App passwords")
@@ -87,10 +79,34 @@ def main():
     print()
 
     # ----------------------------------------------------------------
+    # Granola (optional)
+    # ----------------------------------------------------------------
+    print("3. GRANOLA MEETING NOTES (optional)")
+    print("   If you use Granola (granola.ai) on this machine, this week's meeting notes")
+    print("   will automatically appear in your digest — no extra login required.")
+    print()
+
+    existing_granola = existing.get("granola", {})
+    enable_granola_input = prompt(
+        "   Enable Granola integration? (y/n)",
+        "y" if existing_granola.get("enabled", True) else "n",
+    ).strip().lower()
+    enable_granola = enable_granola_input in ("y", "yes", "")
+
+    granola_credentials_path = ""
+    if enable_granola:
+        default_cred_note = "  (leave blank to use the default: ~/Library/Application Support/Granola/supabase.json)"
+        print(f"   Granola credentials path{default_cred_note}")
+        granola_credentials_path = prompt(
+            "   Credentials path",
+            existing_granola.get("credentials_path", ""),
+        )
+        print()
+
+    # ----------------------------------------------------------------
     # Build config
     # ----------------------------------------------------------------
     config = {
-        "readwise_token": readwise_token,
         "anthropic_api_key": anthropic_key,
         "email": {
             "smtp_server": smtp_server,
@@ -98,6 +114,10 @@ def main():
             "sender_email": sender_email,
             "sender_password": sender_password,
             "recipient_email": recipient_email,
+        },
+        "granola": {
+            "enabled": enable_granola,
+            "credentials_path": granola_credentials_path or None,
         },
     }
 
@@ -137,7 +157,7 @@ def main():
     print("   nano config/filter_config.json")
     print()
     print("3. Test your setup:")
-    print("   python3 digest.py")
+    print("   python3 digest.py --dry-run")
     print()
     print("4. Deploy your archive site to Netlify:")
     print("   See INSTALLATION.md → 'Netlify Deployment'")

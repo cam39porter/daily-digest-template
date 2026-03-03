@@ -3,7 +3,6 @@
 ## Prerequisites
 
 - Python 3.8 or higher (`python3 --version`)
-- A Readwise account with Reader access — token at readwise.io/access_token
 - An Anthropic API key — at console.anthropic.com/settings/keys
 - A Gmail account with an App Password (myaccount.google.com → Security → App passwords)
 - A GitHub account
@@ -58,7 +57,6 @@ python3 setup.py
 ```
 
 The wizard will prompt for:
-- Readwise API token
 - Anthropic API key
 - SMTP server and credentials
 - Recipient email address
@@ -83,18 +81,15 @@ Add your portfolio companies, geographies, sectors, themes, and people. The dige
 python3 digest.py
 ```
 
-Expected output:
+Expected output (with Granola installed and signed in):
 ```
 ============================================================
 Daily Digest — My Daily Digest
 Running at 2026-03-03 07:00:00
 ============================================================
-Fetching recent documents from Readwise Reader...
-  Fetching from 'feed'...
-  Found 23 documents in 'feed'
-  Fetching from 'later'...
-  Found 4 documents in 'later'
-Total: 27 unique documents from last 24 hours
+Granola credentials found — meeting notes will be included in today's digest.
+  Fetching this week's Granola meeting notes...
+  Found 2 Granola meetings from the last 7 days
 Generating digest with Claude...
 Archived to ~/.daily_digest/archive/synopsis_20260303.json
 Updating site data...
@@ -104,6 +99,8 @@ Email sent to you@example.com
 Digest completed successfully
 ============================================================
 ```
+
+If Granola is not installed the two Granola lines are simply absent — everything else runs normally.
 
 ---
 
@@ -159,7 +156,6 @@ In your forked repository, go to **Settings → Secrets and variables → Action
 
 | Secret name | Value |
 |---|---|
-| `READWISE_TOKEN` | Your Readwise API token |
 | `ANTHROPIC_API_KEY` | Your Anthropic API key |
 | `SMTP_SENDER_EMAIL` | Your Gmail address |
 | `SMTP_SENDER_PASSWORD` | Your Gmail App Password |
@@ -191,9 +187,16 @@ Or go to your repository on GitHub → **Actions** → **Daily Digest** → **Ru
 
 ### Option B — macOS launchd (local machine)
 
-Use this if you prefer the digest to run locally rather than on GitHub's servers.
+**Required if you use Granola.** The Granola integration reads credentials from your Mac's local file system — it cannot run on GitHub's remote servers. Run the digest locally and Granola meeting notes are pulled in automatically every day.
 
-Create the plist file:
+#### 6e. Find your Python path and repo path
+
+```bash
+which python3          # e.g. /usr/local/bin/python3
+pwd                    # run this from inside the daily-digest folder
+```
+
+#### 6f. Create the launchd plist
 
 ```bash
 cat > ~/Library/LaunchAgents/com.yourname.dailydigest.plist << 'EOF'
@@ -205,7 +208,7 @@ cat > ~/Library/LaunchAgents/com.yourname.dailydigest.plist << 'EOF'
     <string>com.yourname.dailydigest</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/usr/bin/python3</string>
+        <string>/usr/local/bin/python3</string>
         <string>/FULL/PATH/TO/daily-digest/digest.py</string>
     </array>
     <key>StartCalendarInterval</key>
@@ -226,12 +229,23 @@ cat > ~/Library/LaunchAgents/com.yourname.dailydigest.plist << 'EOF'
 EOF
 ```
 
-Replace `/FULL/PATH/TO/daily-digest/digest.py` and `YOUR_USERNAME` with your actual values.
+Replace `/usr/local/bin/python3` with the output of `which python3`, `/FULL/PATH/TO/daily-digest/digest.py` with the full path to your repo, and `YOUR_USERNAME` with your macOS username (`echo $USER`).
+
+#### 6g. Load and verify
 
 ```bash
 launchctl load ~/Library/LaunchAgents/com.yourname.dailydigest.plist
-launchctl list | grep dailydigest  # verify it loaded
+launchctl list | grep dailydigest  # should show a row with your label
 ```
+
+#### 6h. Test it fires correctly
+
+```bash
+launchctl start com.yourname.dailydigest
+tail -f ~/.daily_digest/digest.log   # watch the output live
+```
+
+The digest runs at 7 AM daily as long as your Mac is on and awake. If the Mac is asleep at 7 AM, launchd will run it the next time it wakes.
 
 ### Option C — cron (Linux / VPS)
 
@@ -256,12 +270,12 @@ tail -f ~/.daily_digest/digest.log
 | Error | Fix |
 |-------|-----|
 | `Configuration file not found` | Run `python3 setup.py` |
-| `401 Unauthorized (Readwise)` | Re-enter Readwise token in `python3 setup.py` |
-| `Rate limited` | Script auto-retries; check Readwise API status |
 | `Email authentication failed` | Use Gmail App Password, not account password |
 | `ModuleNotFoundError: dateutil` | Run `pip install -r requirements.txt` |
 | `git push` asks for a password | Run `gh auth login` and complete the browser flow |
 | `Netlify not deploying` | Check that `site/data/digests.json` is committed and pushed |
+| No Granola meetings in digest | Make sure Granola is installed, you're signed in, and you're running digest.py locally on your Mac (not via GitHub Actions) |
+| `Warning: Could not refresh Granola token` | Open Granola on your Mac to trigger a fresh sign-in, then re-run the digest |
 
 ---
 
