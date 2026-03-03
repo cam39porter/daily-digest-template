@@ -180,12 +180,12 @@ class GranolaClient:
     # Fetch meetings
     # ------------------------------------------------------------------
 
-    def get_todays_meetings(self) -> List[Dict]:
-        """Return meeting summaries from the last 24 hours."""
+    def get_recent_meetings(self) -> List[Dict]:
+        """Return meeting summaries from the last 7 days."""
         from dateutil import parser as date_parser
 
-        print("  Fetching today's Granola meeting notes...")
-        cutoff = datetime.now(timezone.utc) - timedelta(hours=24)
+        print("  Fetching this week's Granola meeting notes...")
+        cutoff = datetime.now(timezone.utc) - timedelta(days=7)
         meetings: List[Dict] = []
 
         try:
@@ -220,7 +220,7 @@ class GranolaClient:
         except Exception as e:
             print(f"  Error fetching Granola meetings: {e}")
 
-        print(f"  Found {len(meetings)} Granola meetings from the last 24 hours")
+        print(f"  Found {len(meetings)} Granola meetings from the last 7 days")
         return meetings
 
     # ------------------------------------------------------------------
@@ -537,7 +537,7 @@ class DailyDigest:
         meetings_section = ""
         if has_meetings:
             meetings_section = """
-<h2>Today's Meetings</h2>
+<h2>Weekly Granola Summary</h2>
 Summarise each meeting from the Granola notes above. For each:
 1. <strong>Meeting title + date/time</strong>
 2. <ul><li> Key decisions made (bold the decision)
@@ -616,7 +616,7 @@ What changed this week that matters in 5 years?
         # Build meeting notes block (injected into the prompt when Granola data exists)
         meetings_block = ""
         if meetings:
-            meeting_lines = [f"TODAY'S GRANOLA MEETING NOTES ({len(meetings)} meeting(s)):\n"]
+            meeting_lines = [f"THIS WEEK'S GRANOLA MEETING NOTES ({len(meetings)} meeting(s)):\n"]
             for m in meetings:
                 meeting_lines.append(f"--- Meeting: {m['title']} ({m['date']}) ---")
                 meeting_lines.append(m["notes"] or "(no notes captured)")
@@ -853,7 +853,7 @@ CRITICAL RULES:
 
         meetings: List[Dict] = []
         if self.granola_client:
-            meetings = self.granola_client.get_todays_meetings()
+            meetings = self.granola_client.get_recent_meetings()
 
         synopsis = self.generate_synopsis(documents, historical, meetings=meetings)
         self.save_synopsis(synopsis)
