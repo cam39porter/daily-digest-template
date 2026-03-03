@@ -16,6 +16,7 @@ import os
 import json
 import requests
 import anthropic
+import markdown
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Dict, Optional
@@ -534,12 +535,14 @@ CRITICAL RULES:
             url = f"https://read.readwise.io/read/{doc_id}" if doc_id else doc.get("source", "#")
             citations.append(f'<li><a href="{url}">{title}</a></li>')
 
+        synopsis_html = markdown.markdown(synopsis["synopsis"], extensions=["extra"])
+
         html_body = EMAIL_HTML_TEMPLATE.format(
             digest_name=digest_name,
             date=synopsis["date"],
             article_count=synopsis["document_count"],
             priority_count=synopsis["priority_count"],
-            content=synopsis["synopsis"],
+            content=synopsis_html,
             citation_count=len(citations),
             citations="\n".join(citations) if citations else "<li>No articles</li>",
         )
