@@ -15,6 +15,7 @@ Configure via:
   ~/.daily_digest/config.json — API keys, email settings, and Granola options (created by setup.py)
 """
 
+import argparse
 import os
 import json
 import requests
@@ -351,13 +352,13 @@ class DailyDigest:
     # Readwise fetching
     # ------------------------------------------------------------------
 
-    def get_recent_documents(self) -> List[Dict]:
-        """Fetch documents from Readwise Reader feed and 'later' from last 24 hours."""
-        print("Fetching recent documents from Readwise Reader...")
+    def get_recent_documents(self, days: int = 1) -> List[Dict]:
+        """Fetch documents from Readwise Reader feed and 'later' from the last `days` days."""
+        print(f"Fetching recent documents from Readwise Reader (last {days} day(s))...")
         from dateutil import parser as date_parser
 
         all_documents = []
-        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=24)
+        cutoff_time = datetime.now(timezone.utc) - timedelta(days=days)
 
         for location in ["feed", "later"]:
             print(f"  Fetching from '{location}'...")
@@ -415,7 +416,7 @@ class DailyDigest:
                 seen.add(doc["id"])
                 unique.append(doc)
 
-        print(f"Total: {len(unique)} unique documents from last 24 hours")
+        print(f"Total: {len(unique)} unique documents from last {days} day(s)")
         return unique
 
     # ------------------------------------------------------------------
@@ -837,15 +838,17 @@ CRITICAL RULES:
     # Main run
     # ------------------------------------------------------------------
 
-    def run(self) -> None:
+    def run(self, days: int = 1, dry_run: bool = False) -> None:
         print("=" * 60)
         print(f"Daily Digest — {self.filter_config.get('digest_name', 'My Digest')}")
         print(f"Running at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        if dry_run:
+            print("DRY RUN — email will not be sent, articles will not be marked as seen")
         print("=" * 60)
 
-        documents = self.get_recent_documents()
+        documents = self.get_recent_documents(days=days)
         if not documents:
-            print("No documents found in the last 24 hours. Exiting.")
+            print(f"No documents found in the last {days} day(s). Exiting.")
             return
 
         documents = self.filter_and_mark_documents(documents)
@@ -858,11 +861,16 @@ CRITICAL RULES:
         synopsis = self.generate_synopsis(documents, historical, meetings=meetings)
         self.save_synopsis(synopsis)
         self.update_site_data()
-        self.send_email(synopsis)
 
-        feed_ids = [d.get("id") for d in documents if d.get("id") and d.get("location") == "feed"]
-        if feed_ids:
-            self.mark_as_seen(feed_ids)
+        if dry_run:
+            print("\n--- DIGEST PREVIEW (email skipped) ---")
+            print(synopsis.get("synopsis", ""))
+            print("--- END PREVIEW ---\n")
+        else:
+            self.send_email(synopsis)
+            feed_ids = [d.get("id") for d in documents if d.get("id") and d.get("location") == "feed"]
+            if feed_ids:
+                self.mark_as_seen(feed_ids)
 
         print("=" * 60)
         print("Digest completed successfully")
@@ -870,8 +878,15 @@ CRITICAL RULES:
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Daily Digest")
+    parser.add_argument("--days", type=int, default=1,
+                        help="Number of days of Readwise articles to fetch (default: 1)")
+    parser.add_argument("--dry-run", action="store_true",
+                        help="Generate digest but skip email and mark-as-seen")
+    args = parser.parse_args()
+
     try:
-        DailyDigest().run()
+        DailyDigest().run(days=args.days, dry_run=args.dry_run)
     except Exception as e:
         print(f"Fatal error: {e}")
         raise
