@@ -16,6 +16,7 @@ import os
 import json
 import requests
 import anthropic
+import markdown
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Dict, Optional
@@ -160,7 +161,18 @@ class DailyDigest:
                         continue
 
                     response.raise_for_status()
-                    data = response.json()
+
+                    if not response.content:
+                        print(f"  Error fetching from '{location}': empty response (status {response.status_code})")
+                        break
+
+                    try:
+                        data = response.json()
+                    except ValueError as e:
+                        preview = response.text[:200] if response.text else "(empty)"
+                        print(f"  Error fetching from '{location}': invalid JSON — {e}")
+                        print(f"  Response ({response.status_code}): {preview}")
+                        break
 
                     for doc in data.get("results", []):
                         doc_date = None
@@ -496,7 +508,8 @@ CRITICAL RULES:
                 print("No changes. Skipping push.")
                 return
             subprocess.run(["git", "commit", "-m", commit_msg], cwd=REPO_DIR, check=True, capture_output=True)
-            subprocess.run(["git", "push", "origin", "main"], cwd=REPO_DIR, check=True, capture_output=True, timeout=60)
+            branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=REPO_DIR, check=True, capture_output=True, text=True).stdout.strip()
+            subprocess.run(["git", "push", "origin", branch], cwd=REPO_DIR, check=True, capture_output=True, timeout=60)
             print("Pushed to GitHub. Netlify will auto-deploy.")
         except subprocess.CalledProcessError as e:
             print(f"Git error: {e.stderr[:300] if e.stderr else e}")
@@ -522,12 +535,14 @@ CRITICAL RULES:
             url = f"https://read.readwise.io/read/{doc_id}" if doc_id else doc.get("source", "#")
             citations.append(f'<li><a href="{url}">{title}</a></li>')
 
+        synopsis_html = markdown.markdown(synopsis["synopsis"], extensions=["extra"])
+
         html_body = EMAIL_HTML_TEMPLATE.format(
             digest_name=digest_name,
             date=synopsis["date"],
             article_count=synopsis["document_count"],
             priority_count=synopsis["priority_count"],
-            content=synopsis["synopsis"],
+            content=synopsis_html,
             citation_count=len(citations),
             citations="\n".join(citations) if citations else "<li>No articles</li>",
         )
@@ -575,8 +590,8 @@ CRITICAL RULES:
         for doc_id in document_ids:
             try:
                 response = self.session.patch(
-                    f"{READWISE_API_BASE}/save/",
-                    json={"id": doc_id, "location": "archive"},
+                    f"{READWISE_API_BASE}/list/{doc_id}/",
+                    json={"location": "archive"},
                 )
                 if response.status_code == 429:
                     time.sleep(int(response.headers.get("Retry-After", 60)))
