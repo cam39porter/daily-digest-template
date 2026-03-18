@@ -2,11 +2,8 @@ name: Daily Digest
 
 on:
   schedule:
-    - cron: '0 12 * * *'  # 7 AM EST (UTC-5) — see README for timezone adjustment
+    - cron: '0 11 * * *'  # 6 AM EST (UTC-5)
   workflow_dispatch:        # enables manual trigger via: gh workflow run daily-digest.yml
-
-permissions:
-  contents: write
 
 jobs:
   run-digest:
@@ -30,7 +27,6 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           SMTP_SENDER_EMAIL: ${{ secrets.SMTP_SENDER_EMAIL }}
           SMTP_SENDER_PASSWORD: ${{ secrets.SMTP_SENDER_PASSWORD }}
-          SMTP_RECIPIENT_EMAIL: ${{ secrets.SMTP_RECIPIENT_EMAIL }}
         run: |
           mkdir -p ~/.daily_digest
           python3 << 'EOF'
@@ -43,17 +39,12 @@ config = {
         "smtp_port": 587,
         "sender_email": os.environ["SMTP_SENDER_EMAIL"],
         "sender_password": os.environ["SMTP_SENDER_PASSWORD"],
-        "recipient_email": os.environ["SMTP_RECIPIENT_EMAIL"],
+        "recipient_email": "cam.b.porter@gmail.com",
     },
 }
 with open(os.path.expanduser("~/.daily_digest/config.json"), "w") as f:
     json.dump(config, f)
 EOF
-
-      - name: Configure git identity
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Run digest
         run: python3 digest.py

@@ -604,7 +604,6 @@ CRITICAL RULES:
         historical = self.get_historical_synopses(days=7)
         synopsis = self.generate_synopsis(documents, historical)
         self.save_synopsis(synopsis)
-        self.update_site_data()
         self.send_email(synopsis)
 
         feed_ids = [d.get("id") for d in documents if d.get("id") and d.get("location") == "feed"]
