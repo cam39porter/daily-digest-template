@@ -1,5 +1,25 @@
 {
-  "generated": "2026-01-01T00:00:00",
-  "count": 0,
-  "digests": []
+  "generated": "2026-03-18T15:55:48.822982",
+  "count": 1,
+  "digests": [
+    {
+      "date": "2026-03-18",
+      "document_count": 1,
+      "priority_count": 1,
+      "synopsis": "# CY Daily Digest \u2014 March 18, 2026\n\n---\n\n> **\u26a0\ufe0f Low Signal Day:** Today's article queue contains a single entry \u2014 a <strong>Readwise Reader</strong> product changelog (March 13, 2026) covering YouTube parsing fixes, API speed improvements, and export enhancements. This is a developer/product update for a read-later tool, not a market-relevant publication. None of the tracked entities, sectors, tickers, or macro themes in the digest filter are implicated. The sections below reflect this honestly rather than manufacturing relevance.\n\n---\n\n<h2>Key Developments</h2>\n\n<p>No qualifying developments today. The sole article in the queue \u2014 a <a href=\"https://read.readwise.io/read/01kkz9kdr44zgy69ry7wk38ckx\">Readwise Reader changelog dated March 13, 2026</a> \u2014 documents internal product fixes (YouTube parsing latency, API response times, subscription sync bugs). While Readwise is a consumer productivity SaaS product, it is not a tracked entity, its metrics are not disclosed, and the changelog contains no data points connecting to AI infrastructure, semiconductor demand, enterprise software spending, or any other active thesis in the portfolio. Surfacing fabricated connections here would violate the core analytical standard of this digest.</p>\n\n---\n\n<h2>Cross-Article Patterns</h2>\n\n<p>With a single non-market article in today's queue, no cross-article synthesis is possible. A meaningful pattern requires at minimum two independently sourced signals pointing at the same structural dynamic \u2014 that threshold is not met today.</p>\n\n<p><em>Note for feed hygiene:</em> The presence of a product changelog in the priority article queue suggests the Readwise Reader feed may be ingesting source-level changelog RSS feeds (e.g., <code>docs.readwise.io/changelog</code>) rather than editorial content. Filtering that source domain from the digest pipeline would improve signal quality on low-volume days.</p>\n\n---\n\n<h2>CY Daily Digest Relevance</h2>\n\n<p>No genuine, direct connections to tracked portfolio entities (<strong>NVIDIA</strong>, <strong>OpenAI</strong>, <strong>Microsoft</strong>, <strong>Google</strong>, <strong>Coinbase</strong>, <strong>Palantir</strong>, etc.), geographies, or macro themes exist in today's article set. Forcing a link \u2014 e.g., claiming Readwise's YouTube parsing fix is relevant to <strong>Alphabet</strong>'s video infrastructure \u2014 would be analytically dishonest and is omitted by design.</p>\n\n---\n\n<h2>Regulation & Policy Signals</h2>\n\n<p>Nothing to report today. No SEC, CFTC, FDA, FTC, AI governance, or crypto regulatory developments appear in the article queue.</p>\n\n---\n\n<h2>Markets & Portfolio Relevance</h2>\n\n<p>Nothing to report today. No price-relevant disclosures, earnings, guidance revisions, or macro data releases appear in the article queue.</p>\n\n---\n\n> **Digest Note:** On days where the article queue does not meet the analytical threshold for the digest, the correct output is a transparent null \u2014 not padded analysis. The next digest will resume standard format when qualifying articles are present. If this is a recurring pattern, consider auditing the RSS/feed sources being piped into the system to ensure editorial and financial journalism sources are prioritized over product documentation feeds.",
+      "key_themes": [],
+      "is_weekly_report": false,
+      "documents": [
+        {
+          "id": "01kkz9kdr44zgy69ry7wk38ckx",
+          "title": "March 13, 2026",
+          "author": "Readwise & Reader Changelog",
+          "source": "https://docs.readwise.io/changelog#march-13-2026",
+          "summary": "Readwise fixed major YouTube parsing problems, making videos load much faster and reducing errors. They also improved API speed, fixed subscription and syncing bugs, and enhanced document exports. New landing pages and parsing updates make the app easier to use and more reliable.",
+          "published_date": "2026-03-13",
+          "is_priority": true
+        }
+      ]
+    }
+  ]
 }

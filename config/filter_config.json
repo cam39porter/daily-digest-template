@@ -1,68 +1,311 @@
 {
-  "_instructions": "Fill in each section with your specific areas of interest. The digest will scan every article for relevance to these entities and include a dedicated 'Relevance' section when matches are found. Delete any categories you don't need. Add as many entries as you like.",
+  "_instructions": "Personalized for CY — investor and analyst across AI, tech, crypto, options, fintech, healthcare, and climate. Covers public equities, ETFs, and digital assets with global scope.",
 
-  "digest_name": "My Daily Digest",
-  "author_name": "Your Name",
-  "focus_description": "Brief description of your focus (e.g., 'Early-stage investor in climate tech and advanced manufacturing')",
+  "digest_name": "CY Daily Digest",
+  "author_name": "CY",
+  "focus_description": "Investor and analyst tracking AI, technology, crypto, options markets, fintech, healthcare, and clean energy — with active positions across US and global equities, ETFs, and digital assets",
 
   "portfolio_companies": [
     {
-      "_note": "Copy this object for each company. 'keywords' are terms that signal relevance in an article.",
-      "name": "Company Name",
-      "description": "One-sentence description of what they do",
-      "website": "company.com",
-      "contact_email": "founder@company.com",
-      "keywords": ["keyword1", "keyword2", "relevant technology", "market they serve"],
-      "competitors": ["competitor1", "competitor2"],
-      "stage": "Seed / Series A / etc."
+      "name": "NVIDIA",
+      "description": "Leading GPU and AI infrastructure semiconductor company",
+      "website": "nvidia.com",
+      "keywords": ["NVIDIA", "NVDA", "H100", "Blackwell", "GPU", "CUDA", "NVLink", "data center chip"],
+      "competitors": ["AMD", "Intel", "Broadcom", "Marvell"],
+      "stage": "Public"
+    },
+    {
+      "name": "OpenAI",
+      "description": "Developer of GPT models and ChatGPT — leading AI lab",
+      "website": "openai.com",
+      "keywords": ["OpenAI", "ChatGPT", "GPT-4", "GPT-5", "Sam Altman", "Sora", "o1", "o3"],
+      "competitors": ["Anthropic", "Google DeepMind", "Meta AI", "Mistral"],
+      "stage": "Private"
+    },
+    {
+      "name": "Anthropic",
+      "description": "AI safety company and developer of Claude models",
+      "website": "anthropic.com",
+      "keywords": ["Anthropic", "Claude", "Dario Amodei", "Daniela Amodei", "AI safety"],
+      "competitors": ["OpenAI", "Google DeepMind", "Meta AI"],
+      "stage": "Private"
+    },
+    {
+      "name": "Google / Alphabet",
+      "description": "Search, cloud, and AI — parent of DeepMind and Google DeepMind",
+      "website": "alphabet.com",
+      "keywords": ["Google", "Alphabet", "GOOGL", "DeepMind", "Gemini", "Waymo", "Google Cloud", "TPU"],
+      "competitors": ["Microsoft", "Amazon", "Meta"],
+      "stage": "Public"
+    },
+    {
+      "name": "Microsoft",
+      "description": "Cloud (Azure), enterprise software, and OpenAI partner",
+      "website": "microsoft.com",
+      "keywords": ["Microsoft", "MSFT", "Azure", "Copilot", "Satya Nadella", "Teams", "Office 365"],
+      "competitors": ["Google", "Amazon", "Salesforce"],
+      "stage": "Public"
+    },
+    {
+      "name": "Apple",
+      "description": "Consumer electronics, software, and services — iPhone, Mac, App Store",
+      "website": "apple.com",
+      "keywords": ["Apple", "AAPL", "iPhone", "Tim Cook", "App Store", "Apple Intelligence", "Vision Pro"],
+      "competitors": ["Samsung", "Google", "Microsoft"],
+      "stage": "Public"
+    },
+    {
+      "name": "Meta",
+      "description": "Social media (Facebook, Instagram, WhatsApp) and AI/AR hardware",
+      "website": "meta.com",
+      "keywords": ["Meta", "META", "Facebook", "Instagram", "WhatsApp", "Llama", "Mark Zuckerberg", "Ray-Ban"],
+      "competitors": ["TikTok", "Snap", "Google", "Apple"],
+      "stage": "Public"
+    },
+    {
+      "name": "Amazon",
+      "description": "E-commerce, AWS cloud, and AI services",
+      "website": "amazon.com",
+      "keywords": ["Amazon", "AMZN", "AWS", "Bedrock", "Andy Jassy", "Alexa", "Trainium", "Inferentia"],
+      "competitors": ["Microsoft", "Google", "Walmart"],
+      "stage": "Public"
+    },
+    {
+      "name": "Tesla",
+      "description": "EV manufacturer and AI/robotics company — Full Self-Driving, Optimus",
+      "website": "tesla.com",
+      "keywords": ["Tesla", "TSLA", "Elon Musk", "Full Self-Driving", "FSD", "Dojo", "Optimus", "Cybertruck"],
+      "competitors": ["BYD", "Rivian", "Waymo", "NIO"],
+      "stage": "Public"
+    },
+    {
+      "name": "Palantir",
+      "description": "AI-powered data analytics for government and enterprise",
+      "website": "palantir.com",
+      "keywords": ["Palantir", "PLTR", "Alex Karp", "AIP", "Foundry", "Gotham", "defense AI"],
+      "competitors": ["C3.ai", "Veritone", "Booz Allen"],
+      "stage": "Public"
+    },
+    {
+      "name": "Coinbase",
+      "description": "Largest US cryptocurrency exchange — retail and institutional crypto",
+      "website": "coinbase.com",
+      "keywords": ["Coinbase", "COIN", "Brian Armstrong", "Base", "cbBTC", "crypto exchange", "stablecoin"],
+      "competitors": ["Binance", "Kraken", "Gemini", "Robinhood"],
+      "stage": "Public"
+    },
+    {
+      "name": "Alibaba",
+      "description": "Chinese e-commerce, cloud (Aliyun), and AI conglomerate",
+      "website": "alibaba.com",
+      "keywords": ["Alibaba", "BABA", "Aliyun", "Qwen", "Jack Ma", "Taobao", "Ant Group"],
+      "competitors": ["JD.com", "Tencent", "ByteDance"],
+      "stage": "Public"
+    },
+    {
+      "name": "ByteDance / TikTok",
+      "description": "Chinese tech company behind TikTok and Douyin",
+      "website": "bytedance.com",
+      "keywords": ["ByteDance", "TikTok", "Douyin", "Liang Rubo", "TikTok ban", "short video"],
+      "competitors": ["Meta", "Snap", "YouTube"],
+      "stage": "Private"
+    },
+    {
+      "name": "DeepSeek",
+      "description": "Chinese AI lab known for efficient open-weight models",
+      "website": "deepseek.com",
+      "keywords": ["DeepSeek", "DeepSeek-R1", "DeepSeek-V3", "Chinese AI", "open-weight model"],
+      "competitors": ["OpenAI", "Anthropic", "Mistral"],
+      "stage": "Private"
+    },
+    {
+      "name": "Perplexity",
+      "description": "AI-powered search engine and answer engine",
+      "website": "perplexity.ai",
+      "keywords": ["Perplexity", "Aravind Srinivas", "AI search", "answer engine"],
+      "competitors": ["Google", "OpenAI", "Microsoft Bing"],
+      "stage": "Private"
+    },
+    {
+      "name": "Blackstone",
+      "description": "Largest alternative asset manager — PE, real estate, credit",
+      "website": "blackstone.com",
+      "keywords": ["Blackstone", "BX", "Steve Schwarzman", "Jon Gray", "BREIT", "alternative assets"],
+      "competitors": ["KKR", "Apollo", "Carlyle"],
+      "stage": "Public"
+    },
+    {
+      "name": "KKR",
+      "description": "Global private equity and alternative asset manager",
+      "website": "kkr.com",
+      "keywords": ["KKR", "KKR & Co", "Henry Kravis", "Scott Nuttall", "private equity", "infrastructure investing"],
+      "competitors": ["Blackstone", "Apollo", "Carlyle"],
+      "stage": "Public"
+    },
+    {
+      "name": "Apollo Global",
+      "description": "Alternative asset manager — private credit, PE, real assets",
+      "website": "apollo.com",
+      "keywords": ["Apollo", "APO", "Marc Rowan", "private credit", "alternative credit"],
+      "competitors": ["Blackstone", "KKR", "Ares"],
+      "stage": "Public"
+    },
+    {
+      "name": "Broadcom",
+      "description": "Semiconductor and infrastructure software — AI networking chips",
+      "website": "broadcom.com",
+      "keywords": ["Broadcom", "AVGO", "Hock Tan", "VMware", "XPUs", "AI ASIC", "Tomahawk"],
+      "competitors": ["NVIDIA", "Marvell", "Intel"],
+      "stage": "Public"
+    },
+    {
+      "name": "CrowdStrike",
+      "description": "AI-native cybersecurity platform — endpoint, cloud, identity",
+      "website": "crowdstrike.com",
+      "keywords": ["CrowdStrike", "CRWD", "George Kurtz", "Falcon", "EDR", "XDR", "cybersecurity"],
+      "competitors": ["Palo Alto Networks", "SentinelOne", "Microsoft Defender"],
+      "stage": "Public"
     }
   ],
 
   "geographies": [
     {
-      "name": "Southeast Asia",
-      "keywords": ["Vietnam", "Indonesia", "Philippines", "Thailand", "ASEAN", "Southeast Asia"],
-      "why_relevant": "Explain why this geography matters to you"
+      "name": "United States",
+      "keywords": ["US", "United States", "Federal Reserve", "SEC", "CFTC", "FDA", "Treasury", "Congress", "White House", "Silicon Valley", "Wall Street"],
+      "why_relevant": "Primary market for equities, crypto regulation, and AI policy"
     },
     {
-      "name": "US Midwest",
-      "keywords": ["Ohio", "Michigan", "Indiana", "Illinois", "Great Lakes", "Rust Belt", "reshoring"],
-      "why_relevant": "Explain why this geography matters to you"
-    }
-  ],
-
-  "people": [
+      "name": "China",
+      "keywords": ["China", "Chinese", "Beijing", "PRC", "PBOC", "CCP", "Shenzhen", "Shanghai", "Hong Kong", "Taiwan", "TSMC", "Huawei", "Baidu", "Tencent", "US-China"],
+      "why_relevant": "Tech competition, supply chain risk, DeepSeek AI, semiconductor restrictions"
+    },
     {
-      "name": "Person Name",
-      "role": "Their role or why they matter",
-      "keywords": ["their name", "their company", "their fund"],
-      "why_relevant": "Why you track this person"
+      "name": "Asia Pacific",
+      "keywords": ["Japan", "South Korea", "India", "Southeast Asia", "ASEAN", "Samsung", "SK Hynix", "SoftBank", "Sony", "TSMC"],
+      "why_relevant": "Semiconductor supply chain, emerging market growth, tech manufacturing"
+    },
+    {
+      "name": "Europe",
+      "keywords": ["European Union", "EU", "ECB", "GDPR", "AI Act", "UK", "Germany", "France", "MiCA", "euro"],
+      "why_relevant": "Regulatory environment for AI and crypto, macro policy signals from ECB"
+    },
+    {
+      "name": "Emerging Markets",
+      "keywords": ["emerging markets", "EM", "Brazil", "Mexico", "Indonesia", "India", "Middle East", "Saudi Arabia", "UAE", "Africa"],
+      "why_relevant": "Global macro exposure via ETFs (SPEM, IDEV, FEM)"
     }
   ],
 
   "industries_sectors": [
     {
-      "name": "Advanced Manufacturing",
-      "keywords": ["reshoring", "onshoring", "factory automation", "industrial robotics", "CNC", "additive manufacturing", "3D printing", "precision machining"],
-      "why_relevant": "Core investment thesis area"
+      "name": "AI & Machine Learning",
+      "keywords": ["artificial intelligence", "machine learning", "large language model", "LLM", "foundation model", "generative AI", "AI agent", "inference", "training", "AI model", "transformer", "multimodal", "AI chip", "AI infrastructure"],
+      "why_relevant": "Core investment theme — exposure via NVDA, MSFT, GOOGL, META, AMZN, PLTR, CRM, NOW, ORCL, SNOW"
     },
     {
-      "name": "Defense Technology",
-      "keywords": ["DoD", "DARPA", "defense procurement", "dual-use", "ITAR", "national security", "Pentagon budget", "defense contractor"],
-      "why_relevant": "Portfolio exposure in defense-adjacent companies"
+      "name": "Semiconductors",
+      "keywords": ["semiconductor", "chip", "wafer", "fab", "foundry", "ASIC", "GPU", "CPU", "memory", "HBM", "advanced packaging", "EUV", "lithography", "chipmaker", "fabless"],
+      "why_relevant": "Active positions in NVDA, AMD, INTC, AVGO, MRVL, MU, LRCX, COHR, TSM, SMCI, AMBA, IONQ"
+    },
+    {
+      "name": "Cybersecurity",
+      "keywords": ["cybersecurity", "zero trust", "endpoint protection", "ransomware", "SIEM", "SOC", "threat intelligence", "firewall", "identity security", "cloud security"],
+      "why_relevant": "Active positions in CRWD, PANW, ZS, OKTA, FTNT, S, RBRK"
+    },
+    {
+      "name": "Cloud & Enterprise Software",
+      "keywords": ["cloud computing", "SaaS", "enterprise software", "ERP", "CRM", "data platform", "workflow automation", "cloud migration", "multi-cloud", "hybrid cloud"],
+      "why_relevant": "Exposure via CRM, NOW, WDAY, SNOW, ORCL, MSFT, GOOGL, AMZN, TEAM, ESTC, BOX, NTNX, OTEX, ZM"
+    },
+    {
+      "name": "Crypto & Digital Assets",
+      "keywords": ["Bitcoin", "Ethereum", "crypto", "cryptocurrency", "blockchain", "DeFi", "stablecoin", "NFT", "Web3", "digital asset", "spot Bitcoin ETF", "crypto regulation", "CFTC crypto", "SEC crypto", "altcoin", "Layer 2", "options on crypto"],
+      "why_relevant": "Direct exposure via COIN, IBIT, and active crypto options positions"
+    },
+    {
+      "name": "Options & Derivatives Markets",
+      "keywords": ["options", "derivatives", "implied volatility", "VIX", "put", "call", "expiration", "open interest", "options flow", "gamma", "delta", "theta", "skew", "0DTE", "CBOE", "CME"],
+      "why_relevant": "Active options trader — key sector for understanding positioning and market structure"
+    },
+    {
+      "name": "Alternative Asset Management",
+      "keywords": ["private equity", "PE", "private credit", "hedge fund", "alternative assets", "carried interest", "LP", "GP", "secondaries", "CLO", "BDC", "credit fund", "infrastructure fund"],
+      "why_relevant": "Positions in BX, KKR, APO, ARES, ARCC, CG, BLK, OWL, FSK, BCSF, PRU, MS, GS"
+    },
+    {
+      "name": "Fintech & Payments",
+      "keywords": ["fintech", "payments", "digital banking", "neobank", "buy now pay later", "BNPL", "embedded finance", "PayFac", "interchange", "open banking"],
+      "why_relevant": "Positions in PYPL, SOFI, COIN, ICE, SPGI, MSCI, AXP"
+    },
+    {
+      "name": "Healthcare & Biotech",
+      "keywords": ["FDA approval", "clinical trial", "Phase 3", "drug approval", "biotech", "pharmaceutical", "oncology", "immunology", "gene therapy", "medical device", "IVD", "GLP-1"],
+      "why_relevant": "Positions in ABBV, PFE, MRK, JNJ, GILD, BMY, MRNA, ABT, BDX, TMO, UNH, EXAS, ALGN, BBIO, LEGN, PCVX, JAZZ, GSK"
+    },
+    {
+      "name": "Clean Energy & Climate Tech",
+      "keywords": ["solar", "wind", "battery storage", "EV", "electric vehicle", "energy transition", "carbon", "renewables", "clean energy", "nuclear", "grid modernization", "IRA", "inflation reduction act"],
+      "why_relevant": "Positions in FSLR, SEDG, NEE, AES, DUK, D, FLNC, OKLO, LEU, POWL, KMI, LNG"
+    },
+    {
+      "name": "Industrials & Materials",
+      "keywords": ["manufacturing", "industrials", "supply chain", "infrastructure", "capital equipment", "commodity", "copper", "gold", "silver", "lithium", "mining"],
+      "why_relevant": "Positions in CAT, ETN, HON, PH, LIN, APD, GLW, PWR, FCX, NEM, RIO, APH"
     }
   ],
 
   "themes": [
     {
-      "name": "Deglobalization",
-      "keywords": ["supply chain", "decoupling", "friend-shoring", "tariff", "trade war", "domestic production", "made in USA"],
-      "why_relevant": "Macro thesis underlying multiple investments"
+      "name": "AI & Automation",
+      "keywords": ["AI adoption", "AI investment", "AI capex", "hyperscaler", "model release", "AI regulation", "automation", "robotics", "agentic AI", "AI productivity"],
+      "why_relevant": "Central macro thesis — affects valuations across tech, semiconductors, and enterprise software"
     },
     {
-      "name": "AI Infrastructure",
-      "keywords": ["GPU", "data center", "inference", "training compute", "NVIDIA", "AI hardware", "cloud infrastructure"],
-      "why_relevant": "Crosscutting theme affecting multiple portfolio companies"
+      "name": "Regulation & Policy",
+      "keywords": ["SEC", "CFTC", "FDA", "FTC", "DOJ", "antitrust", "crypto regulation", "AI governance", "data privacy", "MiCA", "Basel III", "capital requirements"],
+      "why_relevant": "Directly affects crypto holdings, fintech, biotech, and options market structure"
+    },
+    {
+      "name": "Geopolitics & Trade",
+      "keywords": ["tariff", "trade war", "sanctions", "export controls", "US-China", "decoupling", "friend-shoring", "CHIPS Act", "national security", "semiconductor export", "Taiwan Strait"],
+      "why_relevant": "Key risk factor for semiconductor supply chain and China-exposed positions (TSM, NVDA, AAPL)"
+    },
+    {
+      "name": "Interest Rates & Macro",
+      "keywords": ["Federal Reserve", "Fed", "interest rate", "inflation", "CPI", "PCE", "yield curve", "Treasury yield", "rate cut", "FOMC", "recession", "credit spread", "macro"],
+      "why_relevant": "Drives valuation multiples, options pricing, and sector rotation across the portfolio"
+    },
+    {
+      "name": "Deglobalization & Reshoring",
+      "keywords": ["reshoring", "onshoring", "supply chain diversification", "domestic manufacturing", "CHIPS Act", "IRA", "friend-shoring", "nearshoring", "Mexico manufacturing"],
+      "why_relevant": "Drives industrials thesis and affects semiconductor and clean energy positions"
+    }
+  ],
+
+  "people": [
+    {
+      "name": "Jensen Huang",
+      "role": "CEO of NVIDIA",
+      "keywords": ["Jensen Huang", "NVIDIA CEO"],
+      "why_relevant": "Most important person in AI infrastructure — every public statement moves semiconductor sector"
+    },
+    {
+      "name": "Sam Altman",
+      "role": "CEO of OpenAI",
+      "keywords": ["Sam Altman", "OpenAI CEO"],
+      "why_relevant": "Leads most influential AI lab — policy positions and product releases are market-moving"
+    },
+    {
+      "name": "Jerome Powell",
+      "role": "Chair of the Federal Reserve",
+      "keywords": ["Jerome Powell", "Powell", "Fed Chair", "FOMC"],
+      "why_relevant": "Rate decisions directly affect portfolio valuations and options positioning"
+    },
+    {
+      "name": "Elon Musk",
+      "role": "CEO of Tesla and SpaceX, owner of X",
+      "keywords": ["Elon Musk", "Tesla CEO", "xAI", "Grok"],
+      "why_relevant": "TSLA position and broad market influence via xAI and government role"
     }
   ],
 
@@ -70,17 +313,31 @@
     "bloomberg.com",
     "ft.com",
     "wsj.com",
-    "semafor.com"
+    "reuters.com",
+    "axios.com",
+    "techcrunch.com",
+    "theinformation.com",
+    "stratechery.com",
+    "semafor.com",
+    "barrons.com",
+    "cnbc.com",
+    "seekingalpha.com",
+    "coindesk.com",
+    "theblock.co",
+    "nature.com",
+    "arxiv.org"
   ],
 
-  "priority_authors": [
-    "Author Name 1",
-    "Author Name 2"
-  ],
+  "priority_authors": [],
 
   "excluded_topics": [
-    "_note: Topics to explicitly de-prioritize or skip",
-    "celebrity news",
-    "sports"
+    "celebrity gossip",
+    "sports scores",
+    "reality TV",
+    "tabloid news",
+    "unverified rumors without named sources",
+    "low-quality blogs with no editorial standards",
+    "press release aggregators without analysis",
+    "listicles and clickbait content"
   ]
 }
